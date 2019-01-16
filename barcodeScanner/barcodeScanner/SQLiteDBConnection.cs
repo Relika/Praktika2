@@ -91,7 +91,7 @@ namespace barcodeScanner
             return status;
         }
 
-        public static string Update(POCO.UID uid)
+        public static string UpSert(POCO.UID uid)
         {
             string status;
             int insertStatus;
@@ -99,7 +99,7 @@ namespace barcodeScanner
             using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
             {
                 sqliteconnection.Open();
-                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date)";
+                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date) on conflict(UID) do update set quantity=excluded.@Quantity";
                 using (SQLiteCommand insert = new SQLiteCommand(sqliteconnection))
                 {
                     insert.CommandText = insertData;

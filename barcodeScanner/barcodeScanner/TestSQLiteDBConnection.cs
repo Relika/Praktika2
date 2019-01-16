@@ -24,5 +24,17 @@ namespace barcodeScanner
             //SQLiteDBConnection.GetConnection();
             SQLiteDBConnection.Insert(uid);
         }
+
+        [TestMethod]
+        public void TestUpsert()
+        {
+            UID uid = new UID();
+            uid.Uid = "68563427";
+            uid.Quantity = "5";
+            uid.Source = "source";
+            uid.Event_date_UMS = "5765475";
+            string status =SQLiteDBConnection.UpSert(uid);
+            Assert.AreEqual("1", status);
+        }
     }
 }
