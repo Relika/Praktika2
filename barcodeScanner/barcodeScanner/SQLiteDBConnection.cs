@@ -12,33 +12,17 @@ namespace barcodeScanner
     {
         //string tableName = "UID_quantity_counter";
 
-        public static void GetConnection()
-        {
-            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["BarCodeScanner"].ConnectionString;
-            SQLiteConnection sqliteconnection = new SQLiteConnection(connection);
-            try
-            {
-                sqliteconnection.Open();
-                //sqliteconnection.Close();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            //if(sqliteconnection.State != System.Data.ConnectionState.Open)
-            //{
-                
-            //}
 
-        }
-
-        public static void Insert (POCO.UID uid)
+        //enne inserti tuleb kontrollida, kas selline uid on juba olemas, kui on, siis tuleb teha update!
+        public static string Insert (POCO.UID uid)
         {
+            string status;
+            int insertStatus;
             string connection = System.Configuration.ConfigurationManager.ConnectionStrings["BarCodeScanner"].ConnectionString;
             using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
             {
                 sqliteconnection.Open();
-                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS, entry_date) VALUES (@UID,@Quantity,@Source,@Event_date,@Entry_date)";
+                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date)";
                 using (SQLiteCommand insert = new SQLiteCommand(sqliteconnection))
                 {
                     insert.CommandText = insertData;
@@ -46,18 +30,106 @@ namespace barcodeScanner
                     insert.Parameters.AddWithValue("@Quantity", uid.Quantity);
                     insert.Parameters.AddWithValue("@Source", uid.Source);
                     insert.Parameters.AddWithValue("@Event_date", uid.Event_date_UMS);
-                    insert.Parameters.AddWithValue("@Entry_date", uid.Entry_date);
+                    //insert.Parameters.AddWithValue("@Entry_date", uid.Entry_date);
                     try
                     {
-                        insert.ExecuteNonQuery();
+                        insertStatus = insert.ExecuteNonQuery();
+                        if (insertStatus == 1)
+                        {
+                            status = "Row added";
+                        }
+                        else
+                        {
+                            status = "";
+                        }
                     }
                     catch (Exception ex)
                     {
+                        status = ex.Message;
                         throw new Exception(ex.Message);
+                        
                     }
                 }
 
             }
+            return status;
+
+        }
+
+        public static bool CompareUID(string uid)
+        {
+            bool status;
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["BarCodeScanner"].ConnectionString;
+            using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
+            {
+                sqliteconnection.Open();
+                string compareData = "SELECT * FROM UID_quantity_counter WHERE UID =="+uid;
+                using (SQLiteCommand compare = new SQLiteCommand(sqliteconnection))
+                {
+                    compare.CommandText = compareData;
+                    try
+                    {
+                        int compareStatus = compare.ExecuteNonQuery();
+                        if (compareStatus == 1)
+                        {
+                            status = true;
+                        }
+                        else
+                        {
+                            status = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //status = ex.Message;
+                        throw new Exception(ex.Message);
+
+                    }
+                }
+
+            }
+            return status;
+        }
+
+        public static string Update(POCO.UID uid)
+        {
+            string status;
+            int insertStatus;
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["BarCodeScanner"].ConnectionString;
+            using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
+            {
+                sqliteconnection.Open();
+                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date)";
+                using (SQLiteCommand insert = new SQLiteCommand(sqliteconnection))
+                {
+                    insert.CommandText = insertData;
+                    insert.Parameters.AddWithValue("@UID", uid.Uid);
+                    insert.Parameters.AddWithValue("@Quantity", uid.Quantity);
+                    insert.Parameters.AddWithValue("@Source", uid.Source);
+                    insert.Parameters.AddWithValue("@Event_date", uid.Event_date_UMS);
+                    //insert.Parameters.AddWithValue("@Entry_date", uid.Entry_date);
+                    try
+                    {
+                        insertStatus = insert.ExecuteNonQuery();
+                        if (insertStatus == 1)
+                        {
+                            status = "Row added";
+                        }
+                        else
+                        {
+                            status = "";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        status = ex.Message;
+                        throw new Exception(ex.Message);
+
+                    }
+                }
+
+            }
+            return status;
 
         }
     }

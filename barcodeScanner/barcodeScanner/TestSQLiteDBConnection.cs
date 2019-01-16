@@ -17,10 +17,10 @@ namespace barcodeScanner
         {
             UID uid = new UID();
             uid.Uid = "68563427";
-            uid.Quantity = 30;
+            uid.Quantity = "5";
             uid.Source = "source";
-            uid.Event_date_UMS = 5765475;
-            uid.Entry_date = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+            uid.Event_date_UMS = "5765475";
+            //uid.Entry_date = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
             //SQLiteDBConnection.GetConnection();
             SQLiteDBConnection.Insert(uid);
         }

@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         Title="BarCode Scanner" Height="450" Width="800">
     <Grid Margin="0,0,0,0">
-        <TextBox x:Name="TbUID" Height="50" Width="200" Margin="30,30,560,330"></TextBox>
-        <TextBox x:Name="Tbquantity" Height="50" Width="100" Margin="130,100,560,260"  ></TextBox>
+        <TextBox x:Name="TbUID" Height="50" Width="200" Margin="30,30,560,330" FontSize="40"></TextBox>
+        <TextBox x:Name="Tbquantity" Height="50" Width="100" Margin="130,100,560,260"  FontSize="40"></TextBox>
         <Button x:Name="Bnsubmit" Height="50" Width="200" Content="Submit" FontSize="20" Background="LawnGreen" Margin="29,178,560,191" Click="Bnsubmit_Click"></Button>
+        <Label x:Name="Lbstatus" Height="50" Width="200" FontSize="20" Margin="29,254,560,115"></Label>
     </Grid>
 </Window>
