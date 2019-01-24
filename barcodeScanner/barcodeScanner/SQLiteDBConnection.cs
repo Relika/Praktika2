@@ -83,10 +83,8 @@ namespace barcodeScanner
                     {
                         //status = ex.Message;
                         throw new Exception(ex.Message);
-
                     }
                 }
-
             }
             return status;
         }
@@ -99,7 +97,7 @@ namespace barcodeScanner
             using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
             {
                 sqliteconnection.Open();
-                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date) on conflict(UID) do update set quantity=excluded.@Quantity";
+                string insertData = "INSERT INTO UID_quantity_counter (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date) on conflict(UID) do update set quantity=excluded.quantity, event_date_UMS=excluded.event_date_UMS";
                 using (SQLiteCommand insert = new SQLiteCommand(sqliteconnection))
                 {
                     insert.CommandText = insertData;
@@ -114,6 +112,7 @@ namespace barcodeScanner
                         if (insertStatus == 1)
                         {
                             status = "Row added";
+                            
                         }
                         else
                         {
@@ -124,55 +123,10 @@ namespace barcodeScanner
                     {
                         status = ex.Message;
                         throw new Exception(ex.Message);
-
                     }
                 }
-
             }
             return status;
-
         }
     }
 }
-
-//public void Create(Book book)
-//{
-//    SQLiteCommand insertSQL = new SQLiteCommand("INSERT INTO Book (Id, Title, Language, PublicationDate, Publisher, Edition, OfficialUrl, Description, EBookFormat) VALUES (?,?,?,?,?,?,?,?)", sql_con);
-//    insertSQL.Parameters.Add(book.Id);
-//    insertSQL.Parameters.Add(book.Title);
-//    insertSQL.Parameters.Add(book.Language);
-//    insertSQL.Parameters.Add(book.PublicationDate);
-//    insertSQL.Parameters.Add(book.Publisher);
-//    insertSQL.Parameters.Add(book.Edition);
-//    insertSQL.Parameters.Add(book.OfficialUrl);
-//    insertSQL.Parameters.Add(book.Description);
-//    insertSQL.Parameters.Add(book.EBookFormat);
-//    try
-//    {
-//        insertSQL.ExecuteNonQuery();
-//    }
-//    catch (Exception ex)
-//    {
-//        throw new Exception(ex.Message);
-//    }
-//}
-
-//string dbConnectionString = @"Data Source=Sample.s3db;Version=3;";
-//try
-//{
-//    SQLiteConnection sqlite_con = new SQLiteConnection(dbConnectionString);
-//sqlite_con.Open();
-//    string query = "select * from test;";
-//SQLiteCommand sqlite_cmd = new SQLiteCommand(query, sqlite_con);
-//SQLiteDataReader dr = sqlite_cmd.ExecuteReader();
-//    while (dr.Read())
-//    {
-//        MessageBox.Show(dr.GetString(1));
-//    }
-
-//    sqlite_con.Close();
-//}
-//catch (Exception ex)
-//{
-//    MessageBox.Show(ex.ToString());
-//}
