@@ -15,8 +15,7 @@ using System.Windows.Shapes;
 using System.Data.SQLite;
 using System.Collections.ObjectModel;
 using barcodeScanner.POCO;
-
-
+using System.Text.RegularExpressions;
 
 namespace barcodeScanner
 {
@@ -32,11 +31,12 @@ namespace barcodeScanner
         public void Bnsubmit_Click(object sender, RoutedEventArgs e)
         {
             Lbstatus.Content = "";
-            if (TbUID.Text.ToString() != "")
+            if (TbUID.Text.ToString() != "" || Tbquantity.Text.ToString() !="")
             {
                 UID uid = new UID();
                 uid.Uid = TbUID.Text;
                 uid.Quantity = Tbquantity.Text.Replace(',', '.');
+                
                 uid.Source = "tekst";
                 uid.Event_date_UMS = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
                 Lbstatus.Content = SQLiteDBConnection.UpSert(uid);
@@ -69,9 +69,25 @@ namespace barcodeScanner
         {
             if(e.Key == Key.Enter)
             {
-                Bnsubmit.Focus();
+                string q = Tbquantity.Text.ToString();
+                double number;
+                //bool result = double.TryParse(q);
+                if (!double.TryParse(q, out number))
+                {
+                   
+                    Lbstatus.Content = "Please enter only numbers";
+                    Tbquantity.Focus();
+                    Tbquantity.SelectAll();
+                }
+                else
+                {
+                    Bnsubmit.Focus();
+                    Bnsubmit_Click(sender, e);
+                }
             }
         }
 
     }
+
 }
+

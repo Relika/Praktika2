@@ -30,11 +30,13 @@ namespace barcodeScanner
         {
             UID uid = new UID();
             uid.Uid = "79879";
-            uid.Quantity = "8";
+            uid.Quantity = "10";
             uid.Source = "source";
-            uid.Event_date_UMS = "5765476";
+            uid.Event_date_UMS = "576540000";
             string status =SQLiteDBConnection.UpSert(uid);
+            string status2 = SQLiteDBConnection.StartTrigger();
             Assert.AreEqual("Row added", status);
+            Assert.AreEqual("Entry date updated", status2);
         }
     }
 }

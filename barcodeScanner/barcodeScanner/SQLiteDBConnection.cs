@@ -128,5 +128,39 @@ namespace barcodeScanner
             }
             return status;
         }
+
+        public static string StartTrigger()
+        {
+            string status;
+            int triggerStatus;
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["BarCodeScanner"].ConnectionString;
+            using (SQLiteConnection sqliteconnection = new SQLiteConnection(connection))
+            {
+                sqliteconnection.Open();
+                string startTrigger = "CREATE TRIGGER [UpdateLastTime]  AFTER UPDATE ON UID_quantity_counter FOR EACH ROW WHEN NEW.event_date_UMS >= OLD.event_date_UMS BEGIN update UID_quantity_counter set entry_date = CURRENT_TIMESTAMP where UID = OLD.UID; END; ";
+                using (SQLiteCommand trigger = new SQLiteCommand(startTrigger))
+                {
+                    trigger.CommandText = startTrigger;
+                    try{
+                        triggerStatus = trigger.ExecuteNonQuery();
+                        if (triggerStatus == 1)
+                        {
+                            status = "Entry date updated";
+
+                        }
+                        else
+                        {
+                            status = "";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        status = ex.Message;
+                        throw new Exception(ex.Message);
+                    }
+                }
+            }
+            return status;
+        }
     }
 }

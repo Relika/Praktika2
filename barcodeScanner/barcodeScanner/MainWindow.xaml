@@ -11,7 +11,7 @@
             <TextBox x:Name="TbUID" Height="50" Width="200"  FontSize="40" Margin="50,20,50,20"   KeyDown="TbUID_KeyDown"></TextBox>
             <TextBox x:Name="Tbquantity" Height="50" Width="100"   FontSize="40" Margin="50,0,50,20" Text="0" KeyDown="Tbquantity_KeyDown"></TextBox>
             <Button x:Name="Bnsubmit" Height="50" Width="200" Content="Submit" FontSize="20" Margin="50,0,50,20" Background="LawnGreen" Click="Bnsubmit_Click"></Button>
-            <Label x:Name="Lbstatus" Height="50" Width="200" FontSize="20" Margin="50,0,50,20" />
+            <Label x:Name="Lbstatus" Height="50" Width="400" FontSize="20" Margin="50,0,50,20" />
         </StackPanel>
     </Grid>
 </Window>
