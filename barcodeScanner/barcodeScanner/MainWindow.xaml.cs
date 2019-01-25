@@ -16,6 +16,8 @@ using System.Data.SQLite;
 using System.Collections.ObjectModel;
 using barcodeScanner.POCO;
 using System.Text.RegularExpressions;
+using System.Windows.Documents;
+
 
 namespace barcodeScanner
 {
@@ -59,7 +61,7 @@ namespace barcodeScanner
 
         private void TbUID_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter && !String.IsNullOrWhiteSpace(TbUID.Text))
             {
                 if (CbQuantityOff.IsChecked == true){
                     Bnsubmit_Click(sender, e);
@@ -69,6 +71,8 @@ namespace barcodeScanner
                     Tbquantity.SelectAll();
                 }  
             }
+            else { TbUID.Text = ""; TbUID.Focus(); }
+            
         }
 
         //private void Tbquantity_KeyDown(object sender, KeyEventArgs e)
@@ -106,7 +110,8 @@ namespace barcodeScanner
             TbUID.Focus();
         }
 
-        private void Tbquantity_PreviewKeyDown(object sender, KeyEventArgs e)
+
+        private void Tbquantity_PreviewKeyDown_1(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {

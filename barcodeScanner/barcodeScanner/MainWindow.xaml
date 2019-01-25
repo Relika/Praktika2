@@ -9,7 +9,11 @@
     <Grid Margin="0,0,0,0">
         <StackPanel>
             <TextBox x:Name="TbUID" Height="50" Width="500"  FontSize="40" Margin="50,20,50,20"   KeyDown="TbUID_KeyDown"></TextBox>
-            <TextBox x:Name="Tbquantity" Height="50" Width="500"   FontSize="40" Margin="50,0,50,20" Text="0" PreviewKeyDown="Tbquantity_PreviewKeyDown"></TextBox>
+            <TextBox x:Name="Tbquantity" Height="50" Width="500"   FontSize="40" Margin="50,0,50,20" Text="0" PreviewKeyDown="Tbquantity_PreviewKeyDown_1" >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="B" Modifiers="Ctrl" Command="EditingCommands.Backspace" />
+                </TextBox.InputBindings>
+            </TextBox>
             <CheckBox x:Name="CbQuantityOff" Height="50" Margin="340,0,200,0" Checked="CbQuantityOff_Checked" Unchecked="CbQuantityOff_Unchecked" IsChecked="False">
             <Label x:Name="LbQuantityOff" Height="50" Width="200" Content="Check to scan without quantity"></Label>
             </CheckBox>
