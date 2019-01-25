@@ -25,6 +25,8 @@ namespace barcodeScanner
         {
             InitializeComponent();
             TbUID.Focus();
+            //CbQuantityOff.IsChecked == false;
+            //CbQuantityOff_Unchecked(sender,e);
         }
 
 
@@ -37,10 +39,10 @@ namespace barcodeScanner
                 uid.Uid = TbUID.Text;
                 uid.Quantity = Tbquantity.Text.Replace(',', '.');
                 
-                uid.Source = "tekst";
+                uid.Source = System.Configuration.ConfigurationManager.AppSettings["Source"];
                 uid.Event_date_UMS = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
                 Lbstatus.Content = SQLiteDBConnection.UpSert(uid);
-                if (Lbstatus.Content.ToString() == "Row added")
+                if (Lbstatus.Content.ToString().StartsWith("Row added, UID: "))
                 {
                     TbUID.Text = "";
                     Tbquantity.Text = "0";
@@ -59,22 +61,61 @@ namespace barcodeScanner
         {
             if (e.Key == Key.Enter)
             {
-                Tbquantity.Focus();
-                Tbquantity.SelectAll();
-               
+                if (CbQuantityOff.IsChecked == true){
+                    Bnsubmit_Click(sender, e);
+                }
+                else{
+                    Tbquantity.Focus();
+                    Tbquantity.SelectAll();
+                }  
             }
         }
 
-        private void Tbquantity_KeyDown(object sender, KeyEventArgs e)
+        //private void Tbquantity_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if(e.Key == Key.RightShift)
+        //    {
+        //        string q = Tbquantity.Text.ToString();
+        //        double number;
+        //        //bool result = double.TryParse(q);
+        //        if (!double.TryParse(q, out number))
+        //        {
+                   
+        //            Lbstatus.Content = "Please enter only numbers";
+        //            Tbquantity.Focus();
+        //            Tbquantity.SelectAll();
+        //        }
+        //        else
+        //        {
+        //            Bnsubmit.Focus();
+        //            Bnsubmit_Click(sender, e);
+        //        }
+        //    }
+        //}
+
+        private void CbQuantityOff_Checked(object sender, RoutedEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            LbQuantityOff.Content = "Scan without quantity";
+            LbQuantityOff.Foreground = Brushes.Black;
+            TbUID.Focus();
+        }
+
+        private void CbQuantityOff_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LbQuantityOff.Foreground = Brushes.Gray;
+            TbUID.Focus();
+        }
+
+        private void Tbquantity_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
             {
                 string q = Tbquantity.Text.ToString();
                 double number;
                 //bool result = double.TryParse(q);
                 if (!double.TryParse(q, out number))
                 {
-                   
+
                     Lbstatus.Content = "Please enter only numbers";
                     Tbquantity.Focus();
                     Tbquantity.SelectAll();
@@ -86,7 +127,6 @@ namespace barcodeScanner
                 }
             }
         }
-
     }
 
 }

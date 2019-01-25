@@ -111,7 +111,7 @@ namespace barcodeScanner
                         insertStatus = insert.ExecuteNonQuery();
                         if (insertStatus == 1)
                         {
-                            status = "Row added";
+                            status = "Row added, UID: "+uid.Uid;
                             
                         }
                         else
