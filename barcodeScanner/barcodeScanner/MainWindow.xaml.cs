@@ -1,23 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Data.SQLite;
-using System.Collections.ObjectModel;
 using barcodeScanner.POCO;
-using System.Text.RegularExpressions;
-using System.Windows.Documents;
-
+using NLog;
 
 namespace barcodeScanner
 {
@@ -27,10 +13,14 @@ namespace barcodeScanner
         {
             InitializeComponent();
             TbUID.Focus();
+            LogManager.ThrowExceptions = true;
+            Logger logger = LogManager.GetLogger("*");
+            logger.Info("Program started");
+
             //CbQuantityOff.IsChecked == false;
             //CbQuantityOff_Unchecked(sender,e);
         }
-
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public void Bnsubmit_Click(object sender, RoutedEventArgs e)
         {
@@ -38,7 +28,11 @@ namespace barcodeScanner
             if (TbUID.Text.ToString() != "" || Tbquantity.Text.ToString() !="")
             {
                 UID uid = new UID();
-                uid.Uid = TbUID.Text;
+                uid.Uid = TbUID.Text.Replace('/','-');
+                if (CbQuantityOff.IsChecked == true)
+                {
+                    uid.Quantity = "0";
+                }
                 uid.Quantity = Tbquantity.Text.Replace(',', '.');
                 
                 uid.Source = System.Configuration.ConfigurationManager.AppSettings["Source"];
@@ -54,12 +48,14 @@ namespace barcodeScanner
             else
             {
                 Lbstatus.Content = "UID is empty";
+                logger.Info("UID is empty");
                 TbUID.Focus();
             }
         }
 
 
         private void TbUID_KeyDown(object sender, KeyEventArgs e)
+       
         {
             if (e.Key == Key.Enter && !String.IsNullOrWhiteSpace(TbUID.Text))
             {
@@ -71,31 +67,9 @@ namespace barcodeScanner
                     Tbquantity.SelectAll();
                 }  
             }
-            else { TbUID.Text = ""; TbUID.Focus(); }
-            
-        }
+            else {  TbUID.Focus(); } 
 
-        //private void Tbquantity_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if(e.Key == Key.RightShift)
-        //    {
-        //        string q = Tbquantity.Text.ToString();
-        //        double number;
-        //        //bool result = double.TryParse(q);
-        //        if (!double.TryParse(q, out number))
-        //        {
-                   
-        //            Lbstatus.Content = "Please enter only numbers";
-        //            Tbquantity.Focus();
-        //            Tbquantity.SelectAll();
-        //        }
-        //        else
-        //        {
-        //            Bnsubmit.Focus();
-        //            Bnsubmit_Click(sender, e);
-        //        }
-        //    }
-        //}
+        }
 
         private void CbQuantityOff_Checked(object sender, RoutedEventArgs e)
         {
@@ -122,6 +96,7 @@ namespace barcodeScanner
                 {
 
                     Lbstatus.Content = "Please enter only numbers";
+                    
                     Tbquantity.Focus();
                     Tbquantity.SelectAll();
                 }

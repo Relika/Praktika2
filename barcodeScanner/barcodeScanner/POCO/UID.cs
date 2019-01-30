@@ -13,7 +13,5 @@ namespace barcodeScanner.POCO
         public string Source { get; set; }
         public string Event_date_UMS { get; set; }
         public string Entry_date { get; set; }
-
-
     }
 }

@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
 using System.Data.SQLite;
+using NLog;
 
 namespace barcodeScanner
 {
     public class SQLiteDBConnection
     {
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+
         //string tableName = "UID_quantity_counter";
-
-
         //enne inserti tuleb kontrollida, kas selline uid on juba olemas, kui on, siis tuleb teha update!
-        public static string Insert (POCO.UID uid)
+        public static void Insert (POCO.UID uid)
         {
             string status;
             int insertStatus;
@@ -45,15 +41,12 @@ namespace barcodeScanner
                     }
                     catch (Exception ex)
                     {
-                        status = ex.Message;
-                        throw new Exception(ex.Message);
-                        
+                        //status = ex.Message;
+                        //throw new Exception(ex.Message);                        
                     }
                 }
-
             }
-            return status;
-
+            //return status;
         }
 
         public static bool CompareUID(string uid)
@@ -112,6 +105,7 @@ namespace barcodeScanner
                         if (insertStatus == 1)
                         {
                             status = "Row added, UID: "+uid.Uid;
+                            logger.Info("Row added, UID: " + uid.Uid);
                             
                         }
                         else
@@ -121,6 +115,7 @@ namespace barcodeScanner
                     }
                     catch (Exception ex)
                     {
+                        logger.Error(ex, "Upsert");
                         status = ex.Message;
                         throw new Exception(ex.Message);
                     }
