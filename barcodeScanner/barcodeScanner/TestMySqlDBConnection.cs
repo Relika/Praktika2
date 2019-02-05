@@ -12,9 +12,11 @@ namespace barcodeScanner
     {
 
         [TestMethod]
-        public void TestConnect()
+        public void TestCreateTable()
         {
             string status = MySqlDBConnection.CreateTable();
         }
+
+
     }
 }
