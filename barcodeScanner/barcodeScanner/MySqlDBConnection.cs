@@ -7,6 +7,42 @@ namespace barcodeScanner
 {
     class MySqlDBConnection
     {
+        public static string InsertData(POCO.UID uid)
+        {
+            string status;
+            String connection = System.Configuration.ConfigurationManager.ConnectionStrings["MySql"].ConnectionString;
+            string insterData = "Insert into UID_quantity_counter5 (UID, quantity, source, event_date_UMS) VALUES (@UID,@Quantity,@Source,@Event_date) ON DUBLICATE KEY UPDATE  quantity=@quantity, event_date_UMS=@Event_date";
+            using (MySqlConnection mysqlconnection = new MySqlConnection(connection))
+            {
+                using (MySqlCommand insert = new MySqlCommand(insterData, mysqlconnection))
+                {
+                    mysqlconnection.Open();
+                    insert.Parameters.AddWithValue("@UID", uid.Uid);
+                    insert.Parameters.AddWithValue("@Quantity", uid.Quantity);
+                    insert.Parameters.AddWithValue("@Source", uid.Source);
+                    insert.Parameters.AddWithValue("@Event_date", uid.Event_date_UMS);
+                    try
+                    {
+                        int insertStatus = insert.ExecuteNonQuery();
+                        if (insertStatus == 1)
+                        {
+                            status = "Row added";
+                        }
+                        else
+                        {
+                            status = "";
+                        }
+                    } catch (Exception ex)
+                    {
+                        status = ex.Message;
+                    }
+
+                }
+            }
+            return status;
+
+        }
+
         public static string CreateTable()
         {
             int createStatus;
